@@ -12,7 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@langchain/openai": "^0.0.14",
     "dotenv": "^16.4.5",
-    "openai": "^4.28.0"
+    "langchain": "^0.1.23",
+    "openai": "^4.28.0",
+    "pdf-parse": "^1.1.1",
+    "youtube-transcript": "^1.0.6",
+    "youtubei.js": "^5.8.0"
   }
 }
