@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { openai } from "./openai";
+import { openai } from "./openai.js";
 import math from 'advanced-calculator';
 
 const QUESTION = process.argv[2] || 'hi'
