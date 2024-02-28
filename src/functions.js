@@ -15,15 +15,23 @@ const messages = [
 
 
   const functions = {
-    calculate:async ({expression})=>{
+    calculate ({expression}){
         return math.evaluate(expression)
     },
+    async generateImage({prompt}){
+        if (!prompt) {
+            prompt = "prompt create an image of loard krishna holding the floot"
+        }
+        const result = await openai.images.generate({prompt})
+        console.log(result);
+        return ''
+    }
   }
 
 
 const getCompletion = (messages)=>{
     return openai.chat.completions.create({
-        model:'gpt-3.5-turbo-0613',
+        model:'gpt-3.5-turbo-16k',
         messages,
         temperature:0,
         // function_call:{name:'calcuate'},
@@ -35,12 +43,26 @@ const getCompletion = (messages)=>{
                 properties:{
                     expression:{
                         type:'string',
-                        description:'Then math expression to evaluate like "2 * 3 + (21 / 2) ^ 2"'
+                        description:'The math expression to evaluate like "2 * 3 + (21 / 2) ^ 2"'
                     }
                 },
                 required:['expression']
             }
-        }]
+        },
+    {
+        name:'generateImage',
+            description:'create or generate image based on a description',
+            parameters:{
+                type:'object',
+                properties:{
+                    expression:{
+                        type:'string',
+                        description:'The description of the image to generate'
+                    }
+                },
+                required:['prompt']
+            }
+    }]
     })
 }
 
@@ -55,9 +77,9 @@ while(true){
         const fName = respons.choices[0].message.function_call.name;
         const args = respons.choices[0].message.function_call.arguments;
         const funcTCall = functions[fName]
-        const params = JSON.parse(args)
+        const params = await JSON.parse(args)
 
-        const results = funcTCall(params)
+        const results = await funcTCall(params)
         messages.push({
             role:'assistant',
             content:null,
